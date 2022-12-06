@@ -3260,6 +3260,7 @@ public final class URI
         {
             int p = start;
             int q = p;
+            int qreg = p;
             URISyntaxException ex = null;
 
             boolean serverChars;
@@ -3272,7 +3273,7 @@ public final class URI
             } else {
                 serverChars = (scan(p, n, L_SERVER, H_SERVER) == n);
             }
-            regChars = (scan(p, n, L_REG_NAME, H_REG_NAME) == n);
+            regChars = ((qreg = scan(p, n, L_REG_NAME, H_REG_NAME)) == n);
 
             if (regChars && !serverChars) {
                 // Must be a registry-based authority
@@ -3329,7 +3330,7 @@ public final class URI
                     // a malformed IPv6 address
                     throw ex;
                 } else {
-                    fail("Illegal character in authority", q);
+                    fail("Illegal character in authority", serverChars ? q : qreg);
                 }
             }
 
